@@ -16,7 +16,7 @@ data "aws_ami" "amazon-linux-2" {
 
 resource "aws_launch_configuration" "as-conf" {
   name_prefix     = "outyet"
-  image_id        = "${data.aws_ami.amazon-linux-2.id}"
+  image_id        = "ami-0a878393a7a5811eb"
   instance_type   = "t2.micro"
   security_groups = ["${aws_security_group.allow-ssh.id}", "${aws_security_group.allow-out.id}", "${aws_security_group.outyet-sg.id}"]
 
@@ -35,6 +35,12 @@ resource "aws_autoscaling_group" "outyet-asg" {
   force_delete              = false
   launch_configuration      = "${aws_launch_configuration.as-conf.name}"
   vpc_zone_identifier       = "${var.subnet_ids}"
+  target_group_arns         = ["${var.target_group_arn}"]
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 resource "aws_security_group" "allow-ssh" {
