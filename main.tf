@@ -26,7 +26,7 @@ resource "aws_launch_configuration" "as-conf" {
 }
 
 resource "aws_autoscaling_group" "outyet-asg" {
-  name                      = "srecc-outyet"
+  name_prefix               = "srecc-outyet"
   max_size                  = 6
   min_size                  = 3
   health_check_grace_period = 300
