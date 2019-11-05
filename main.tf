@@ -1,24 +1,8 @@
-data "aws_ami" "amazon-linux-2" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "owner-alias"
-    values = ["amazon"]
-  }
-
-
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm*"]
-  }
-}
-
 resource "aws_launch_configuration" "as-conf" {
   name_prefix     = "outyet"
   image_id        = "ami-0a878393a7a5811eb"
   instance_type   = "t2.micro"
-  security_groups = ["${aws_security_group.allow-ssh.id}", "${aws_security_group.allow-out.id}", "${aws_security_group.outyet-sg.id}"]
+  security_groups = ["${aws_security_group.allow-out.id}", "${aws_security_group.outyet-sg.id}"]
 
   lifecycle {
     create_before_destroy = true
@@ -26,7 +10,7 @@ resource "aws_launch_configuration" "as-conf" {
 }
 
 resource "aws_autoscaling_group" "outyet-asg" {
-  name_prefix               = "srecc-outyet"
+  name                      = "${aws_launch_configuration.as-conf.name}"
   max_size                  = 6
   min_size                  = 3
   health_check_grace_period = 300
@@ -41,19 +25,6 @@ resource "aws_autoscaling_group" "outyet-asg" {
     create_before_destroy = true
   }
 
-}
-
-resource "aws_security_group" "allow-ssh" {
-  name        = "allow_ssh"
-  description = "Allow inbound SSH from the world"
-  vpc_id      = "${var.vpc_id}"
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
 }
 
 resource "aws_security_group" "allow-out" {
