@@ -57,8 +57,20 @@ resource "aws_security_group" "outyet-sg" {
     from_port   = 8080
     to_port     = 8080
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    self = true
   }
+
+  egress {
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+    self = true
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
 }
 
 
