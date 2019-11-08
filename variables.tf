@@ -3,7 +3,7 @@ variable "vpc_id" {
 }
 
 variable "subnet_ids" {
-  type = "list"
+  type = list(string)
 }
 
 variable "target_group_arn" {
