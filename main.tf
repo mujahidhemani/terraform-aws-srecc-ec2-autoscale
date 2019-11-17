@@ -1,8 +1,8 @@
 resource "aws_launch_configuration" "as-conf" {
-  name_prefix     = "outyet"
-  image_id        = "ami-038c8cb0197602e21"
-  instance_type   = "t2.micro"
-  security_groups = ["${aws_security_group.allow-out.id}", "${aws_security_group.outyet-sg.id}"]
+  name_prefix                 = "outyet"
+  image_id                    = "ami-038c8cb0197602e21"
+  instance_type               = "t2.micro"
+  security_groups             = ["${aws_security_group.allow-out.id}", "${aws_security_group.outyet-sg.id}"]
   associate_public_ip_address = false
   lifecycle {
     create_before_destroy = true
